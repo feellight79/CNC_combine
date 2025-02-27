@@ -1,3 +1,4 @@
+import React from "react";
 import moment from "moment"
 function CompletedTask({task}) {
     return ( 

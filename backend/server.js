@@ -18,15 +18,35 @@ app.use(express.json())
 app.use(cors())
 
 //db config
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-}, (err) => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log("DB Connected")
+// mongoose.connect(process.env.MONGO_URI, {
+//     useNewUrlParser: true,
+// }, (err) => {
+//     if (err) {
+//         console.log(err)
+//     } else {
+//         console.log("DB Connected")
+//     }
+// })
+
+const connectDB = async () => {
+    try {
+      if (!process.env.MONGO_URI) {
+        throw new Error("MONGO_URI is not defined in .env");
+      }
+  
+      await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+  
+      console.log(`✅ Connected to MongoDB`);
+    } catch (error) {
+      console.error(`❌ Database connection error: ${error.message}`);
+      process.exit(1);
     }
-})
+  };
+  
+  connectDB();
 
 //api endpoints
 app.use("/api/user", userRouter)
